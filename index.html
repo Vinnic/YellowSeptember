@@ -130,7 +130,20 @@
             font-size: 0.8rem;
             z-index: 100;
         }
-                
+        
+		.btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn:disabled:hover {
+            background-color: #cccccc;
+            transform: none;
+            box-shadow: none;
+        }
+        
         .btn-export {
             background-color: var(--verde);
             color: white;
@@ -310,14 +323,6 @@
             font-size: 150px;
             opacity: 0.1;
             transform: rotate(-15deg);
-        }
-        
-        .hearts {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 24px;
-            opacity: 0.7;
         }
         
         .certificate {
@@ -513,6 +518,10 @@
             gap: 5px;
         }
         
+		.btn-admin.hidden {
+            display: none !important;
+        }
+		
         .admin-field label {
             font-weight: bold;
         }
@@ -663,8 +672,7 @@
     <div class="container">
         <div class="sun"></div>
         <div class="flower">🌻</div>
-        <div class="hearts">💛💛💛</div>
-        <div class="ribbon"><span>Setembro Amarelo 💛</span></div>
+        <div class="ribbon"><span>💛Setembro Amarelo</span></div>
         
         <!-- Botão de acesso administrativo -->
         <button id="admin-btn" class="btn btn-admin">Acesso Admin</button>
@@ -673,8 +681,8 @@
         <div id="welcome-screen" class="screen active">
             <h1>Quiz Setembro Amarelo</h1>
             <div class="emoji">💛🤝🌻😊🧠</div>
-            <p>Bem-vindo ao quiz de conscientização sobre saúde mental and prevenção ao suicídio!</p>
-            <p>Este jogo foi criado para promover um ambiente de trabalho mais saudável, com empatia and colaboração entre equipes.</p>
+            <p>Bem-vindo ao quiz de conscientização sobre saúde mental e prevenção ao suicídio!</p>
+            <p>Este jogo foi criado para promover um ambiente de trabalho mais saudável, com empatia e colaboração entre equipes.</p>
             
             <button id="play-btn" class="btn btn-start">Jogar Agora</button>
         </div>
@@ -777,7 +785,7 @@
             <div class="certificate">
                 <h2>Parabéns, <span id="player-name-final"></span>!</h2>
                 <p>Você demonstrou interesse em aprender mais sobre</p>
-                <p>saúde mental and prevenção ao suicídio.</p>
+                <p>saúde mental e prevenção ao suicídio.</p>
                 <p class="score">Sua pontuação: <span id="final-score">0</span> pontos</p>
                 <p>Equipe: <span id="player-team-final"></span></p>
             </div>
@@ -786,7 +794,7 @@
                 <button id="restart-btn" class="btn">Jogar Novamente</button>
             </div>
             
-            <p class="message">Lembre-se: cuidar da saúde mental é um ato de coragem and todos nós podemos fazer a diferença na vida uns dos outros através da escuta ativa and empatia. 💛</p>
+            <p class="message">Lembre-se: cuidar da saúde mental é um ato de coragem e todos nós podemos fazer a diferença na vida uns dos outros através da escuta ativa e empatia. 💛</p>
         </div>
         
         <!-- Tela de Administração -->
@@ -836,18 +844,18 @@
     </div>
 
     <script>
-        // Perguntas and respostas (com respostas corretas variadas)
+        // Perguntas e respostas (com respostas corretas variadas)
         const questions = [
             {
                 question: "Qual dessas atitudes pode ajudar na prevenção do suicídio?",
                 options: [
                     "Ignorar sinais de depressão em colegas",
-                    "Oferecer escuta ativa and acolhimento",
+                    "Oferecer escuta ativa e acolhimento",
                     "Fazer piadas sobre saúde mental",
                     "Julgar quem busca ajuda psicológica"
                 ],
                 correct: 1,
-                curiosity: "A escuta ativa and sem julgamentos é uma das formas mais importantes de apoiar alguém que está passando por dificuldades emocionais. 💛"
+                curiosity: "A escuta ativa e sem julgamentos é uma das formas mais importantes de apoiar alguém que está passando por dificuldades emocionais. 💛"
             },
             {
                 question: "Qual é um mito comum sobre depressão?",
@@ -869,7 +877,7 @@
                     "20 mil"
                 ],
                 correct: 2,
-                curiosity: "Infelizmente, o Brasil registra cerca de 14 mil casos de suicídio por ano, sendo uma triste realidade que precisa de atenção and prevenção. 💛"
+                curiosity: "Infelizmente, o Brasil registra cerca de 14 mil casos de suicídio por ano, sendo uma triste realidade que precisa de atenção e prevenção. 💛"
             },
             {
                 question: "Qual destes é um sinal de alerta para problemas de saúde mental?",
@@ -883,26 +891,26 @@
                 curiosity: "Mudanças bruscas de comportamento, como isolamento, podem ser sinais de que alguém está passando por dificuldades. A observação atenta pode salvar vidas. 👂"
             },
             {
-                question: "A partir de maio de 2025, a NR-1 exige que as empresas brasileiras avaliem and gerem os riscos psicossociais no trabalho. Os riscos psicossociais podem afetar a saúde mental dos trabalhadores, como:",
+                question: "A partir de maio de 2025, a NR-1 exige que as empresas brasileiras avaliem e gerem os riscos psicossociais no trabalho. Os riscos psicossociais podem afetar a saúde mental dos trabalhadores, como:",
                 options: [
-                    "Ambiente bem iluminado, Horários flexíveis and Bonificações por produtividade",
-                    "Sobrecarga de trabalho, Falta de apoio organizacional and Prazos and metas impossíveis",
-                    "Home office, Treinamentos regulares and Feedback construtivo",
-                    "Reuniões de equipe, Programas de bem-estar and Planos de carreira"
+                    "Ambiente bem iluminado, Horários flexíveis e Bonificações por produtividade",
+                    "Sobrecarga de trabalho, Falta de apoio organizacional e Prazos e metas impossíveis",
+                    "Home office, Treinamentos regulares e Feedback construtivo",
+                    "Reuniões de equipe, Programas de bem-estar e Planos de carreira"
                 ],
                 correct: 1,
-                curiosity: "A nova NR-1 visa proteger os trabalhadores dos riscos psicossociais que incluem sobrecarga, falta de apoio and metas irreais, que podem levar ao esgotamento mental. 🧘‍♀️"
+                curiosity: "A nova NR-1 visa proteger os trabalhadores dos riscos psicossociais que incluem sobrecarga, falta de apoio e metas irreais, que podem levar ao esgotamento mental. 🧘‍♀️"
             },
             {
                 question: "Qual é uma atitude positiva para promover bem-estar na equipe?",
                 options: [
                     "Fofocar sobre os colegas",
-                    "Reconhecer and valorizar conquistas",
+                    "Reconhecer e valorizar conquistas",
                     "Criar competições extremamente disputadas",
                     "Ignorar conflitos para evitar discussões"
                 ],
                 correct: 1,
-                curiosity: "O reconhecimento genuíno fortalece os laços da equipe and contribui para um ambiente mais positivo and acolhedor. 👏"
+                curiosity: "O reconhecimento genuíno fortalece os laços da equipe e contribui para um ambiente mais positivo e acolhedor. 👏"
             },
             {
                 question: "O que é empatia?",
@@ -913,10 +921,10 @@
                     "Resolver os problemas dos outros"
                 ],
                 correct: 1,
-                curiosity: "Empatia não significa resolver os problemas alheios, mas sim oferecer compreensão and apoio emocional. 🤝"
+                curiosity: "Empatia não significa resolver os problemas alheios, mas sim oferecer compreensão e apoio emocional. 🤝"
             },
             {
-                question: "Entre os jovens de 15 a 29 anos, o suicídio fica em qual classificação por causa de morte, depois de acidentes no trânsito and violência?",
+                question: "Entre os jovens de 15 a 29 anos, o suicídio fica em qual classificação por causa de morte, depois de acidentes no trânsito e violência?",
                 options: [
                     "primeira",
                     "segunda",
@@ -930,23 +938,23 @@
                 question: "O que fazer se você está preocupado com a saúde mental de um colega?",
                 options: [
                     "Ignorar para não invadir a privacidade",
-                    "Conversar em particular and expressar preocupação",
+                    "Conversar em particular e expressar preocupação",
                     "Contar para todos no escritório",
                     "Dar ultimatos para que busque ajuda"
                 ],
                 correct: 1,
-                curiosity: "Abordar o assunto com delicadeza and privacidade pode ser o primeiro passo para que alguém busque ajuda. Às vezes, só precisamos saber que alguém se importa. 💬"
+                curiosity: "Abordar o assunto com delicadeza e privacidade pode ser o primeiro passo para que alguém busque ajuda. Às vezes, só precisamos saber que alguém se importa. 💬"
             },
             {
                 question: "Se você percebe que está acumulando estresse no trabalho, a reflexão mais produtiva é:",
                 options: [
-                    "Ignorar os sinais and continuar trabalhando cada vez mais",
-                    "Procurar entender as causas and buscar estratégias para gerenciar melhor o estresse",
-                    "Culpar os colegas and a empresa pela situação",
+                    "Ignorar os sinais e continuar trabalhando cada vez mais",
+                    "Procurar entender as causas e buscar estratégias para gerenciar melhor o estresse",
+                    "Culpar os colegas e a empresa pela situação",
                     "Pedir demissão imediatamente sem considerar outras opções"
                 ],
                 correct: 1,
-                curiosity: "Reconhecer and entender as fontes de estresse é o primeiro passo para desenvolver estratégias saudáveis de enfrentamento. Autoconhecimento é fundamental para o bem-estar mental! 💪"
+                curiosity: "Reconhecer e entender as fontes de estresse é o primeiro passo para desenvolver estratégias saudáveis de enfrentamento. Autoconhecimento é fundamental para o bem-estar mental! 💪"
             }
         ];
 
@@ -955,13 +963,13 @@
         
         // IDs dos campos do Google Forms (SUBSTITUA com os IDs dos seus campos)
         const FORM_FIELDS = {
-            Nome: "entry.781581738",
-			Equipe: "entry.1642870108",
+			Nome: "entry.781581738",
+            Equipe: "entry.1642870108",
 			Turma: "entry.1548008957",
-            Pontos: "entry.1290128113",
-			Tipo: "entry.821530720",
-            Data: "entry.1167209243",
-            Respostas: "entry.1405787993"
+			Pontos: "entry.1290128113",
+            Tipo: "entry.821530720",
+			Data: "entry.1167209243",
+			Respostas: "entry.1405787993"
         };
 
         // Credenciais de admin
@@ -1130,6 +1138,13 @@
             if (screen === playerIntroScreen) {
                 currentTurmaCode.textContent = playerTurma;
             }
+			
+			// Esconder o botão de admin se não estiver na tela inicial
+            if (screen.id !== 'welcome-screen') {
+                adminBtn.classList.add('hidden');
+            } else {
+                adminBtn.classList.remove('hidden');
+            }
         }
 
         // Função para entrar na turma
@@ -1228,7 +1243,7 @@
                 score += Math.max(10, timeLeft); // Pontuação baseada no tempo restante
                 feedbackTitle.textContent = "Resposta Correta! 🎉";
                 feedbackEmoji.textContent = "✅💛";
-                feedbackText.textContent = `Parabéns! Você acertou and ganhou ${Math.max(10, timeLeft)} pontos.`;
+                feedbackText.textContent = `Parabéns! Você acertou e ganhou ${Math.max(10, timeLeft)} pontos.`;
             } else if (selectedOption === -1) {
                 // Tempo esgotado
                 feedbackTitle.textContent = "Tempo Esgotado! ⏰";
@@ -1284,34 +1299,40 @@
 
         // Função para gerar código aleatório
         function generateRandomCode() {
-            const randomNum = Math.floor(1000 + Math.random() * 9000); // Gera número entre 1000 and 9999
+            const randomNum = Math.floor(1000 + Math.random() * 9000); // Gera número entre 1000 e 9999
             turmaNumberInput.value = randomNum;
         }
 
         // Função para criar turma
-        function createTurma() {
-            const adminName = adminNameInput.value.trim();
-            const turmaNumber = turmaNumberInput.value.trim();
-            
-            if (!adminName) {
-                alert('Por favor, digite seu nome.');
-                return;
-            }
-            
-            if (!/^\d{4}$/.test(turmaNumber)) {
-                alert('Por favor, digite um número de 4 dígitos para o código.');
-                return;
-            }
-            
-            const turmaCode = `${selectedPrefix}-${turmaNumber}`;
-            
-            // Mostrar código gerado
-            generatedTurmaCode.textContent = turmaCode;
-            turmaResult.style.display = 'flex';
-            
-            // Enviar criação de turma para o Google Forms
-            sendTurmaCreationToGoogleForms(turmaCode, adminName);
-        }
+		function createTurma() {
+			const adminName = adminNameInput.value.trim();
+			const turmaNumber = turmaNumberInput.value.trim();
+			
+			if (!adminName) {
+				alert('Por favor, digite seu nome.');
+				return;
+			}
+			
+			if (!/^\d{4}$/.test(turmaNumber)) {
+				alert('Por favor, digite um número de 4 dígitos para o código.');
+				return;
+			}
+			
+			const turmaCode = `${selectedPrefix}-${turmaNumber}`;
+			
+			// Mostrar código gerado
+			generatedTurmaCode.textContent = turmaCode;
+			turmaResult.style.display = 'flex';
+			
+			// Desabilita o botão "Criar Turma"
+			document.getElementById('create-turma-btn').disabled = true;
+			
+			// Opcional: trocar o texto do botão
+			document.getElementById('create-turma-btn').textContent = 'Turma Criada';
+			
+			// Enviar criação de turma para o Google Forms
+			sendTurmaCreationToGoogleForms(turmaCode, adminName);
+		}
 
         // Função para copiar código da turma
         function copyTurmaCode() {
@@ -1340,13 +1361,13 @@
                 
                 // Preparar os dados para o Forms
                 const formData = new URLSearchParams();
-				formData.append(FORM_FIELDS.Nome, `${adminName}`);
-				formData.append(FORM_FIELDS.Equipe, "Administração");
                 formData.append(FORM_FIELDS.Turma, turmaCode);
+                formData.append(FORM_FIELDS.Nome, `${adminName}`);
                 formData.append(FORM_FIELDS.Pontos, "0");
-				formData.append(FORM_FIELDS.Tipo, "Aplicador");
                 formData.append(FORM_FIELDS.Data, new Date().toLocaleString('pt-BR'));
                 formData.append(FORM_FIELDS.Respostas, "ADMIN");
+                formData.append(FORM_FIELDS.Tipo, "Aplicador");
+                formData.append(FORM_FIELDS.Equipe, "Administração");
                 
                 // Enviar para o Google Forms
                 await fetch(GOOGLE_FORMS_URL, {
@@ -1387,7 +1408,7 @@
             formData.append(FORM_FIELDS.Pontos, score.toString());
             formData.append(FORM_FIELDS.Data, new Date().toLocaleString('pt-BR'));
             formData.append(FORM_FIELDS.Respostas, JSON.stringify(playerAnswers));
-            formData.append(FORM_FIELDS.Tipo, "Quiz Setembro Amarelo");
+            formData.append(FORM_FIELDS.Tipo, "Quiz");
             formData.append(FORM_FIELDS.Equipe, playerTeam);
             
             // Enviar dados (usando navegation.sendBeacon para melhor confiabilidade)
