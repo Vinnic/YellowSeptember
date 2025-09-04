@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Setembro Amarelo - Modo Equipe</title>
+    <style>
+        :root {
+            --amarelo: #FFD700;
+            --amarelo-escuro: #FFC400;
+            --amarelo-claro: #FFF9C4;
+            --cinza: #F5F5F5;
+            --azul: #2196F3;
+            --verde: #4CAF50;
+            --vermelho: #F44336;
+            --roxo: #9C27B0;
+            --laranja: #FF9800;
+            --rosa: #E91E63;
+            
+            --cor-sol: #FFB300;
+            --cor-ouro: #FFD700;
+            --cor-canario: #FFF59D;
+            --cor-mostarda: #FFD54F;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--amarelo-claro), #fff);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1 {
+            color: var(--amarelo-escuro);
+            margin-bottom: 15px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: var(--amarelo-escuro);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            color: var(--amarelo-escuro);
+            margin: 25px 0 15px;
+            font-size: 1.5rem;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+        
+        .btn {
+            background-color: var(--amarelo);
+            color: #333;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            background-color: var(--amarelo-escuro);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-skip {
+            background-color: var(--azul);
+            color: white;
+        }
+        
+        .btn-quit {
+            background-color: var(--vermelho);
+            color: white;
+        }
+        
+        .btn-start {
+            background-color: var(--verde);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+        }
+        
+        .btn-join {
+            background-color: var(--azul);
+            color: white;
+        }
+        
+        .btn-admin {
+            background-color: var(--roxo);
+            color: white;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            z-index: 100;
+        }
+                
+        .btn-export {
+            background-color: var(--verde);
+            color: white;
+        }
+        
+        .btn-generate {
+            background-color: var(--laranja);
+            color: white;
+        }
+        
+        .btn-copy {
+            background-color: var(--azul);
+            color: white;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .option {
+            background-color: #e8e8e8;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #ddd;
+        }
+        
+        .option:hover {
+            background-color: var(--amarelo-claro);
+            transform: scale(1.02);
+            border-color: var(--amarelo-escuro);
+        }
+        
+        .option.correct {
+            background-color: var(--verde);
+            color: white;
+            border-color: #2E7D32;
+        }
+        
+        .option.incorrect {
+            background-color: var(--vermelho);
+            color: white;
+            border-color: #C62828;
+        }
+        
+        .timer {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--amarelo-escuro);
+            margin: 15px 0;
+            padding: 10px;
+            border: 3px solid var(--amarelo);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            animation: pulse 1s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--amarelo);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .message {
+            background-color: var(--amarelo-claro);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-style: italic;
+            border-left: 5px solid var(--amarelo-escuro);
+        }
+        
+        .score {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--amarelo-escuro);
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--amarelo-claro);
+            border-radius: 10px;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .ribbon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+        }
+        
+        .ribbon span {
+            position: absolute;
+            top: 30px;
+            right: -40px;
+            transform: rotate(45deg);
+            width: 200px;
+            padding: 10px 0;
+            background: var(--amarelo);
+            color: #333;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .emoji {
+            font-size: 2.5rem;
+            margin: 15px 0;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        
+        .sun {
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: var(--amarelo);
+            border-radius: 50%;
+            box-shadow: 0 0 50px var(--amarelo);
+            opacity: 0.2;
+        }
+        
+        .flower {
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            font-size: 150px;
+            opacity: 0.1;
+            transform: rotate(-15deg);
+        }
+        
+        .hearts {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            opacity: 0.7;
+        }
+        
+        .certificate {
+            border: 15px solid var(--amarelo);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+            background: #fff;
+            position: relative;
+        }
+        
+        .certificate h2 {
+            color: var(--amarelo-escuro);
+            margin-bottom: 15px;
+        }
+        
+        .certificate p {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .input-name {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px;
+            border: 2px solid var(--amarelo);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .input-name:focus {
+            border-color: var(--amarelo-escuro);
+            box-shadow: 0 0 10px rgba(255, 196, 0, 0.5);
+        }
+        
+        .input-code {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px;
+            border: 2px solid var(--azul);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .input-code:focus {
+            border-color: var(--azul);
+            box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+        }
+        
+        .input-login {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px;
+            border: 2px solid var(--roxo);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .input-login:focus {
+            border-color: var(--roxo);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+        }
+        
+        .team-code {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--amarelo-escuro);
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--amarelo-claro);
+            border-radius: 10px;
+            letter-spacing: 3px;
+        }
+        
+        .team-join {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: var(--amarelo-claro);
+            border-radius: 15px;
+        }
+        
+        .team-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .team-item {
+            background-color: var(--cinza);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+        
+        .team-item:hover {
+            background-color: var(--amarelo-claro);
+        }
+        
+        .team-item.selected {
+            transform: scale(1.05);
+        }
+        
+        .team-sol {
+            background-color: var(--cor-sol);
+            color: white;
+        }
+        
+        .team-ouro {
+            background-color: var(--cor-ouro);
+            color: #333;
+        }
+        
+        .team-canario {
+            background-color: var(--cor-canario);
+            color: #333;
+        }
+        
+        .team-mostarda {
+            background-color: var(--cor-mostarda);
+            color: #333;
+        }
+        
+        .team-item.selected.team-sol,
+        .team-item.selected.team-ouro,
+        .team-item.selected.team-canario,
+        .team-item.selected.team-mostarda {
+            border-color: var(--roxo);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+        }
+        
+        .sync-status {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 99;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .sync-pending {
+            background-color: #FF9800;
+            color: white;
+        }
+        .sync-success {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .sync-error {
+            background-color: #F44336;
+            color: white;
+        }
+        
+        /* Estilos para a tela de administração */
+        .admin-panel {
+            background-color: var(--amarelo-claro);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .admin-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .admin-field label {
+            font-weight: bold;
+        }
+        
+        .code-prefix {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .prefix-btn {
+            padding: 10px 15px;
+            border: 2px solid var(--cinza);
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .prefix-btn.selected {
+            border-color: var(--roxo);
+            background-color: var(--amarelo-claro);
+        }
+        
+        .turma-code-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--roxo);
+            margin: 15px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 10px;
+            border: 2px dashed var(--roxo);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .generate-code {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        /* Tela de login admin */
+        .login-form {
+            background-color: var(--amarelo-claro);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .login-field {
+            margin-bottom: 20px;
+        }
+        
+        .login-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--roxo);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .btn-start {
+                padding: 12px 25px;
+                font-size: 1.1rem;
+            }
+            
+            .input-name, .input-code, .input-login {
+                padding: 12px;
+                font-size: 1rem;
+            }
+            
+            .turma-code-display {
+                font-size: 1.2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .team-list {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .emoji {
+                font-size: 2rem;
+            }
+            
+            .timer {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .team-code {
+                font-size: 1.5rem;
+                padding: 10px;
+            }
+            
+            .certificate {
+                padding: 20px;
+            }
+            
+            .code-prefix {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .generate-code {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sun"></div>
+        <div class="flower">🌻</div>
+        <div class="hearts">💛💛💛</div>
+        <div class="ribbon"><span>Setembro Amarelo 💛</span></div>
+        
+        <!-- Botão de acesso administrativo -->
+        <button id="admin-btn" class="btn btn-admin">Acesso Admin</button>
+        
+        <!-- Tela de Boas-Vindas -->
+        <div id="welcome-screen" class="screen active">
+            <h1>Quiz Setembro Amarelo</h1>
+            <div class="emoji">💛🤝🌻😊🧠</div>
+            <p>Bem-vindo ao quiz de conscientização sobre saúde mental and prevenção ao suicídio!</p>
+            <p>Este jogo foi criado para promover um ambiente de trabalho mais saudável, com empatia and colaboração entre equipes.</p>
+            
+            <button id="play-btn" class="btn btn-start">Jogar Agora</button>
+        </div>
+        
+        <!-- Tela de Login Admin -->
+        <div id="admin-login-screen" class="screen">
+            <h1>Acesso Administrativo</h1>
+            <div class="emoji">🔐👨‍💼</div>
+            
+            <div class="login-form">
+                <div class="login-field">
+                    <label for="admin-user">Usuário:</label>
+                    <input type="text" id="admin-user" class="input-login" placeholder="Digite o usuário">
+                </div>
+                
+                <div class="login-field">
+                    <label for="admin-pass">Senha:</label>
+                    <input type="password" id="admin-pass" class="input-login" placeholder="Digite a senha">
+                </div>
+                
+                <button id="admin-login-btn" class="btn">Entrar</button>
+            </div>
+            
+            <button id="back-to-welcome-from-login" class="btn">Voltar</button>
+        </div>
+        
+        <!-- Tela de Entrada de Código de Turma -->
+        <div id="turma-entry-screen" class="screen">
+            <h1>Entrar na Turma</h1>
+            <div class="emoji">👥🔢📝</div>
+            
+            <div class="team-join">
+                <h3>Digite o código da turma</h3>
+                <p>Informe o código fornecido pelo aplicador:</p>
+                <input type="text" id="turma-code-input" class="input-code" placeholder="Ex: XX-1234" autocomplete="off" maxlength="7">
+                <button id="join-turma-btn" class="btn btn-join">Entrar na Turma</button>
+            </div>
+            
+            <button id="back-to-welcome" class="btn">Voltar</button>
+        </div>
+        
+        <!-- Tela de Introdução do Participante -->
+        <div id="player-intro-screen" class="screen">
+            <h1>Quiz Setembro Amarelo</h1>
+            <div class="emoji">💛🤝🌻😊🧠</div>
+            
+            <h2>Turma: <span id="current-turma-code">XXXX</span></h2>
+            
+            <div style="margin: 30px 0;">
+                <label for="player-name" style="font-weight: bold; display: block; margin-bottom: 10px;">Digite seu nome:</label>
+                <input type="text" id="player-name" class="input-name" placeholder="Seu nome" autocomplete="off">
+            </div>
+            
+            <div style="margin: 30px 0;">
+                <h3>Escolha sua equipe:</h3>
+                <div class="team-list">
+                    <div class="team-item team-sol" data-team="Sol">Sol ☀️</div>
+                    <div class="team-item team-ouro" data-team="Ouro">Ouro 🥇</div>
+                    <div class="team-item team-canario" data-team="Canário">Canário 🐤</div>
+                    <div class="team-item team-mostarda" data-team="Mostarda">Mostarda 🟡</div>
+                </div>
+            </div>
+            
+            <p class="message">Lembre-se: sua saúde mental importa! 💛</p>
+            <button id="start-quiz-btn" class="btn btn-start" disabled>Começar Quiz</button>
+        </div>
+        
+        <!-- Tela de Perguntas -->
+        <div id="question-screen" class="screen">
+            <h2>Pergunta <span id="question-number">1</span></h2>
+            <div id="turma-indicator" style="margin-bottom: 10px; font-weight: bold; color: var(--laranja);"></div>
+            <div class="progress-bar">
+                <div id="progress" class="progress"></div>
+            </div>
+            <div id="timer" class="timer">60s</div>
+            <p id="question-text">Pergunta carregando...</p>
+            <div class="options-container" id="options-container">
+                <!-- As opções serão inseridas aqui via JavaScript -->
+            </div>
+            <div>
+                <button id="skip-btn" class="btn btn-skip">Pular ➡️</button>
+                <button id="quit-btn" class="btn btn-quit">Desistir 🏳️</button>
+            </div>
+        </div>
+        
+        <!-- Tela de Feedback -->
+        <div id="feedback-screen" class="screen">
+            <h2 id="feedback-title">Resposta!</h2>
+            <div id="feedback-emoji" class="emoji">😊</div>
+            <p id="feedback-text">Feedback carregando...</p>
+            <p class="message" id="curiosity-message">Curiosidade carregando...</p>
+            <button id="next-btn" class="btn">Próxima Pergunta</button>
+        </div>
+        
+        <!-- Tela de Resultado Final -->
+        <div id="results-screen" class="screen">
+            <h1>Quiz Finalizado! 🎉</h1>
+            <div class="emoji">🏆💛⭐</div>
+            
+            <div class="certificate">
+                <h2>Parabéns, <span id="player-name-final"></span>!</h2>
+                <p>Você demonstrou interesse em aprender mais sobre</p>
+                <p>saúde mental and prevenção ao suicídio.</p>
+                <p class="score">Sua pontuação: <span id="final-score">0</span> pontos</p>
+                <p>Equipe: <span id="player-team-final"></span></p>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <button id="restart-btn" class="btn">Jogar Novamente</button>
+            </div>
+            
+            <p class="message">Lembre-se: cuidar da saúde mental é um ato de coragem and todos nós podemos fazer a diferença na vida uns dos outros através da escuta ativa and empatia. 💛</p>
+        </div>
+        
+        <!-- Tela de Administração -->
+        <div id="admin-screen" class="screen">
+            <h1>Painel do Aplicador</h1>
+            <div class="emoji">👨‍💼🔧⚙️</div>
+            
+            <div class="admin-panel">
+                <h3>Criar Nova Turma</h3>
+                
+                <div class="admin-form">
+                    <div class="admin-field">
+                        <label for="admin-name">Seu nome:</label>
+                        <input type="text" id="admin-name" class="input-name" placeholder="Nome do aplicador">
+                    </div>
+                    
+                    <div class="admin-field">
+                        <label>Prefixo do código:</label>
+                        <div class="code-prefix">
+                            <div class="prefix-btn" data-prefix="SP">SP</div>
+                            <div class="prefix-btn" data-prefix="RJ">RJ</div>
+                        </div>
+                    </div>
+                    
+                    <div class="admin-field">
+                        <label for="turma-number">Número (4 dígitos):</label>
+                        <div class="generate-code">
+                            <input type="text" id="turma-number" class="input-code" placeholder="1234" maxlength="4">
+                            <button id="generate-code-btn" class="btn btn-generate">Gerar</button>
+                        </div>
+                    </div>
+                    
+                    <button id="create-turma-btn" class="btn">Criar Turma</button>
+                </div>
+                
+                <div id="turma-result" class="turma-code-display" style="display: none;">
+                    <span>Código da turma: <span id="generated-turma-code"></span></span>
+                    <button id="copy-code-btn" class="btn btn-copy">Copiar</button>
+                </div>
+            </div>
+            
+            <button id="admin-back-btn" class="btn">Voltar ao Início</button>
+        </div>
+                
+        <!-- Elemento para status de sincronização -->
+        <div id="sync-status" class="sync-status" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Perguntas and respostas (com respostas corretas variadas)
+        const questions = [
+            {
+                question: "Qual dessas atitudes pode ajudar na prevenção do suicídio?",
+                options: [
+                    "Ignorar sinais de depressão em colegas",
+                    "Oferecer escuta ativa and acolhimento",
+                    "Fazer piadas sobre saúde mental",
+                    "Julgar quem busca ajuda psicológica"
+                ],
+                correct: 1,
+                curiosity: "A escuta ativa and sem julgamentos é uma das formas mais importantes de apoiar alguém que está passando por dificuldades emocionais. 💛"
+            },
+            {
+                question: "Qual é um mito comum sobre depressão?",
+                options: [
+                    "Depressão é uma doença real",
+                    "Depressão é frescura ou falta de força de vontade",
+                    "Depressão pode afetar qualquer pessoa",
+                    "Depressão tem tratamento"
+                ],
+                correct: 1,
+                curiosity: "A depressão é uma condição médica seria, não uma fraqueza de caráter. Buscar ajuda é sinal de força, não de fraqueza. 🌱"
+            },
+            {
+                question: "No Brasil, os registros se aproximam de quantos casos por ano?",
+                options: [
+                    "5 mil",
+                    "8 mil",
+                    "14 mil",
+                    "20 mil"
+                ],
+                correct: 2,
+                curiosity: "Infelizmente, o Brasil registra cerca de 14 mil casos de suicídio por ano, sendo uma triste realidade que precisa de atenção and prevenção. 💛"
+            },
+            {
+                question: "Qual destes é um sinal de alerta para problemas de saúde mental?",
+                options: [
+                    "Expressar gratidão frequentemente",
+                    "Isolamento social repentino",
+                    "Manter uma rotina de exercícios",
+                    "Buscar aprender coisas novas"
+                ],
+                correct: 1,
+                curiosity: "Mudanças bruscas de comportamento, como isolamento, podem ser sinais de que alguém está passando por dificuldades. A observação atenta pode salvar vidas. 👂"
+            },
+            {
+                question: "A partir de maio de 2025, a NR-1 exige que as empresas brasileiras avaliem and gerem os riscos psicossociais no trabalho. Os riscos psicossociais podem afetar a saúde mental dos trabalhadores, como:",
+                options: [
+                    "Ambiente bem iluminado, Horários flexíveis and Bonificações por produtividade",
+                    "Sobrecarga de trabalho, Falta de apoio organizacional and Prazos and metas impossíveis",
+                    "Home office, Treinamentos regulares and Feedback construtivo",
+                    "Reuniões de equipe, Programas de bem-estar and Planos de carreira"
+                ],
+                correct: 1,
+                curiosity: "A nova NR-1 visa proteger os trabalhadores dos riscos psicossociais que incluem sobrecarga, falta de apoio and metas irreais, que podem levar ao esgotamento mental. 🧘‍♀️"
+            },
+            {
+                question: "Qual é uma atitude positiva para promover bem-estar na equipe?",
+                options: [
+                    "Fofocar sobre os colegas",
+                    "Reconhecer and valorizar conquistas",
+                    "Criar competições extremamente disputadas",
+                    "Ignorar conflitos para evitar discussões"
+                ],
+                correct: 1,
+                curiosity: "O reconhecimento genuíno fortalece os laços da equipe and contribui para um ambiente mais positivo and acolhedor. 👏"
+            },
+            {
+                question: "O que é empatia?",
+                options: [
+                    "Sentir pena dos outros",
+                    "Capacidade de se colocar no lugar do outro",
+                    "Concordar com todas as opiniões",
+                    "Resolver os problemas dos outros"
+                ],
+                correct: 1,
+                curiosity: "Empatia não significa resolver os problemas alheios, mas sim oferecer compreensão and apoio emocional. 🤝"
+            },
+            {
+                question: "Entre os jovens de 15 a 29 anos, o suicídio fica em qual classificação por causa de morte, depois de acidentes no trânsito and violência?",
+                options: [
+                    "primeira",
+                    "segunda",
+                    "terceira",
+                    "quarta"
+                ],
+                correct: 2,
+                curiosity: "Entre jovens de 15 a 29 anos, o suicídio é a terceira causa de morte, um dado alarmante que reforça a importância da prevenção. 🌟"
+            },
+            {
+                question: "O que fazer se você está preocupado com a saúde mental de um colega?",
+                options: [
+                    "Ignorar para não invadir a privacidade",
+                    "Conversar em particular and expressar preocupação",
+                    "Contar para todos no escritório",
+                    "Dar ultimatos para que busque ajuda"
+                ],
+                correct: 1,
+                curiosity: "Abordar o assunto com delicadeza and privacidade pode ser o primeiro passo para que alguém busque ajuda. Às vezes, só precisamos saber que alguém se importa. 💬"
+            },
+            {
+                question: "Se você percebe que está acumulando estresse no trabalho, a reflexão mais produtiva é:",
+                options: [
+                    "Ignorar os sinais and continuar trabalhando cada vez mais",
+                    "Procurar entender as causas and buscar estratégias para gerenciar melhor o estresse",
+                    "Culpar os colegas and a empresa pela situação",
+                    "Pedir demissão imediatamente sem considerar outras opções"
+                ],
+                correct: 1,
+                curiosity: "Reconhecer and entender as fontes de estresse é o primeiro passo para desenvolver estratégias saudáveis de enfrentamento. Autoconhecimento é fundamental para o bem-estar mental! 💪"
+            }
+        ];
+
+        // URL do Google Forms (SUBSTITUA com o URL do seu forms)
+        const GOOGLE_FORMS_URL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfLt5JsSDec8Sj8kHJ_LRRE0dQcEFTGD5jh1HyFXPRe2i54sg/formResponse";
+        
+        // IDs dos campos do Google Forms (SUBSTITUA com os IDs dos seus campos)
+        const FORM_FIELDS = {
+            Nome: "entry.781581738",
+			Equipe: "entry.1642870108",
+			Turma: "entry.1548008957",
+            Pontos: "entry.1290128113",
+			Tipo: "entry.821530720",
+            Data: "entry.1167209243",
+            Respostas: "entry.1405787993"
+        };
+
+        // Credenciais de admin
+        const ADMIN_CREDENTIALS = {
+            user: "SABER2025",
+            pass: "SABER2025"
+        };
+
+        // Variáveis do jogo
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 60;
+        let timer;
+        let playerName = "";
+        let playerTurma = "";
+        let playerTeam = "";
+        let playerAnswers = [];
+        let selectedPrefix = "SP";
+
+        // Elementos DOM
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const adminLoginScreen = document.getElementById('admin-login-screen');
+        const turmaEntryScreen = document.getElementById('turma-entry-screen');
+        const playerIntroScreen = document.getElementById('player-intro-screen');
+        const questionScreen = document.getElementById('question-screen');
+        const feedbackScreen = document.getElementById('feedback-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const adminScreen = document.getElementById('admin-screen');
+        
+        const playBtn = document.getElementById('play-btn');
+        const adminBtn = document.getElementById('admin-btn');
+        const adminUserInput = document.getElementById('admin-user');
+        const adminPassInput = document.getElementById('admin-pass');
+        const adminLoginBtn = document.getElementById('admin-login-btn');
+        const backToWelcomeFromLoginBtn = document.getElementById('back-to-welcome-from-login');
+        const turmaCodeInput = document.getElementById('turma-code-input');
+        const joinTurmaBtn = document.getElementById('join-turma-btn');
+        const backToWelcomeBtn = document.getElementById('back-to-welcome');
+        const playerNameInput = document.getElementById('player-name');
+        const startQuizBtn = document.getElementById('start-quiz-btn');
+        const currentTurmaCode = document.getElementById('current-turma-code');
+        const questionNumber = document.getElementById('question-number');
+        const questionText = document.getElementById('question-text');
+        const turmaIndicator = document.getElementById('turma-indicator');
+        const optionsContainer = document.getElementById('options-container');
+        const timerDisplay = document.getElementById('timer');
+        const progressBar = document.getElementById('progress');
+        const skipBtn = document.getElementById('skip-btn');
+        const quitBtn = document.getElementById('quit-btn');
+        
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackEmoji = document.getElementById('feedback-emoji');
+        const feedbackText = document.getElementById('feedback-text');
+        const curiosityMessage = document.getElementById('curiosity-message');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const playerNameFinal = document.getElementById('player-name-final');
+        const playerTeamFinal = document.getElementById('player-team-final');
+        const finalScore = document.getElementById('final-score');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        const adminNameInput = document.getElementById('admin-name');
+        const prefixButtons = document.querySelectorAll('.prefix-btn');
+        const turmaNumberInput = document.getElementById('turma-number');
+        const generateCodeBtn = document.getElementById('generate-code-btn');
+        const createTurmaBtn = document.getElementById('create-turma-btn');
+        const turmaResult = document.getElementById('turma-result');
+        const generatedTurmaCode = document.getElementById('generated-turma-code');
+        const copyCodeBtn = document.getElementById('copy-code-btn');
+        const adminBackBtn = document.getElementById('admin-back-btn');
+        
+        const syncStatus = document.getElementById('sync-status');
+        
+        // Elementos de equipe
+        const teamItems = document.querySelectorAll('.team-item');
+
+        // Inicialização
+        function init() {
+            // Event listeners
+            playBtn.addEventListener('click', () => showScreen(turmaEntryScreen));
+            adminBtn.addEventListener('click', () => showScreen(adminLoginScreen));
+            adminLoginBtn.addEventListener('click', checkAdminLogin);
+            backToWelcomeFromLoginBtn.addEventListener('click', () => showScreen(welcomeScreen));
+            joinTurmaBtn.addEventListener('click', joinTurma);
+            backToWelcomeBtn.addEventListener('click', () => showScreen(welcomeScreen));
+            
+            playerNameInput.addEventListener('input', () => {
+                startQuizBtn.disabled = !playerNameInput.value.trim() || !playerTeam;
+            });
+            
+            startQuizBtn.addEventListener('click', startGame);
+            
+            skipBtn.addEventListener('click', nextQuestion);
+            quitBtn.addEventListener('click', endGame);
+            
+            nextBtn.addEventListener('click', nextQuestion);
+            restartBtn.addEventListener('click', restartGame);
+            
+            // Event listeners para equipes
+            teamItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    teamItems.forEach(t => t.classList.remove('selected'));
+                    item.classList.add('selected');
+                    playerTeam = item.dataset.team;
+                    startQuizBtn.disabled = !playerNameInput.value.trim() || !playerTeam;
+                });
+            });
+            
+            // Event listeners para admin
+            prefixButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    prefixButtons.forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedPrefix = btn.dataset.prefix;
+                });
+            });
+            
+            generateCodeBtn.addEventListener('click', generateRandomCode);
+            createTurmaBtn.addEventListener('click', createTurma);
+            copyCodeBtn.addEventListener('click', copyTurmaCode);
+            adminBackBtn.addEventListener('click', () => showScreen(welcomeScreen));
+            
+            // Configurar máscara para o código da turma
+            turmaCodeInput.addEventListener('input', function(e) {
+                // Converter para maiúsculas
+                this.value = this.value.toUpperCase();
+                
+                // Adicionar hífen automaticamente
+                if (this.value.length === 2 && !this.value.includes('-')) {
+                    this.value = this.value + '-';
+                }
+                
+                // Limitar o comprimento
+                if (this.value.length > 7) {
+                    this.value = this.value.slice(0, 7);
+                }
+            });
+            
+            // Selecionar o primeiro prefixo por padrão
+            prefixButtons[0].classList.add('selected');
+        }
+
+        // Função para verificar login admin
+        function checkAdminLogin() {
+            const username = adminUserInput.value.trim();
+            const password = adminPassInput.value.trim();
+            
+            if (username === ADMIN_CREDENTIALS.user && password === ADMIN_CREDENTIALS.pass) {
+                showScreen(adminScreen);
+                adminUserInput.value = "";
+                adminPassInput.value = "";
+            } else {
+                alert("Usuário ou senha incorretos. Tente novamente.");
+            }
+        }
+
+        // Função para mostrar uma tela específica
+        function showScreen(screen) {
+            // Esconder todas as telas
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            
+            // Mostrar a tela solicitada
+            screen.classList.add('active');
+            
+            // Ações específicas para cada tela
+            if (screen === playerIntroScreen) {
+                currentTurmaCode.textContent = playerTurma;
+            }
+        }
+
+        // Função para entrar na turma
+        function joinTurma() {
+            const code = turmaCodeInput.value.trim().toUpperCase();
+            
+            if (code.length === 7 && code.includes('-')) {
+                playerTurma = code;
+                showScreen(playerIntroScreen);
+            } else {
+                alert("Por favor, digite um código válido no formato XX-1234");
+            }
+        }
+
+        // Função para iniciar o jogo
+        function startGame() {
+            playerName = playerNameInput.value.trim();
+            if (!playerName) {
+                alert("Por favor, digite seu nome");
+                return;
+            }
+            
+            if (!playerTeam) {
+                alert("Por favor, escolha uma equipe");
+                return;
+            }
+            
+            currentQuestion = 0;
+            score = 0;
+            playerAnswers = [];
+            showQuestion();
+        }
+
+        // Função para mostrar uma pergunta
+        function showQuestion() {
+            clearInterval(timer);
+            
+            const question = questions[currentQuestion];
+            questionNumber.textContent = currentQuestion + 1;
+            questionText.textContent = question.question;
+            turmaIndicator.textContent = `Turma: ${playerTurma} | Jogador: ${playerName} | Equipe: ${playerTeam}`;
+            
+            // Atualizar barra de progresso
+            progressBar.style.width = `${((currentQuestion) / questions.length) * 100}%`;
+            
+            // Limpar opções anteriores
+            optionsContainer.innerHTML = '';
+            
+            // Adicionar novas opções
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => checkAnswer(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Iniciar temporizador
+            timeLeft = 60;
+            timerDisplay.textContent = `${timeLeft}s`;
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    checkAnswer(-1); // -1 indica tempo esgotado
+                }
+            }, 1000);
+            
+            showScreen(questionScreen);
+        }
+
+        // Função para verificar a resposta
+        function checkAnswer(selectedOption) {
+            clearInterval(timer);
+            
+            const question = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const isCorrect = selectedOption === question.correct;
+            
+            // Registrar resposta do jogador
+            playerAnswers.push({
+                question: question.question,
+                selected: selectedOption,
+                correct: question.correct,
+                time: 60 - timeLeft
+            });
+            
+            // Destacar resposta correta
+            options[question.correct].classList.add('correct');
+            
+            if (isCorrect) {
+                // Resposta correta
+                score += Math.max(10, timeLeft); // Pontuação baseada no tempo restante
+                feedbackTitle.textContent = "Resposta Correta! 🎉";
+                feedbackEmoji.textContent = "✅💛";
+                feedbackText.textContent = `Parabéns! Você acertou and ganhou ${Math.max(10, timeLeft)} pontos.`;
+            } else if (selectedOption === -1) {
+                // Tempo esgotado
+                feedbackTitle.textContent = "Tempo Esgotado! ⏰";
+                feedbackEmoji.textContent = "⏳😢";
+                feedbackText.textContent = "O tempo acabou antes de você responder.";
+            } else {
+                // Resposta incorreta
+                options[selectedOption].classList.add('incorrect');
+                feedbackTitle.textContent = "Resposta Incorreta ❌";
+                feedbackEmoji.textContent = "😕💛";
+                feedbackText.textContent = "Não foi dessa vez, mas continue tentando!";
+            }
+            
+            // Adicionar curiosidade
+            curiosityMessage.textContent = question.curiosity;
+            
+            showScreen(feedbackScreen);
+        }
+
+        // Função para avançar para a próxima pergunta
+        function nextQuestion() {
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        // Função para finalizar o jogo
+        function endGame() {
+            clearInterval(timer);
+            
+            playerNameFinal.textContent = playerName;
+            playerTeamFinal.textContent = playerTeam;
+            finalScore.textContent = score;
+            
+            // Enviar resultados para o Google Forms
+            submitResults();
+            
+            showScreen(resultsScreen);
+        }
+
+        // Função para reiniciar o jogo
+        function restartGame() {
+            playerNameInput.value = "";
+            playerTeam = "";
+            teamItems.forEach(t => t.classList.remove('selected'));
+            startQuizBtn.disabled = true;
+            showScreen(welcomeScreen);
+        }
+
+        // Função para gerar código aleatório
+        function generateRandomCode() {
+            const randomNum = Math.floor(1000 + Math.random() * 9000); // Gera número entre 1000 and 9999
+            turmaNumberInput.value = randomNum;
+        }
+
+        // Função para criar turma
+        function createTurma() {
+            const adminName = adminNameInput.value.trim();
+            const turmaNumber = turmaNumberInput.value.trim();
+            
+            if (!adminName) {
+                alert('Por favor, digite seu nome.');
+                return;
+            }
+            
+            if (!/^\d{4}$/.test(turmaNumber)) {
+                alert('Por favor, digite um número de 4 dígitos para o código.');
+                return;
+            }
+            
+            const turmaCode = `${selectedPrefix}-${turmaNumber}`;
+            
+            // Mostrar código gerado
+            generatedTurmaCode.textContent = turmaCode;
+            turmaResult.style.display = 'flex';
+            
+            // Enviar criação de turma para o Google Forms
+            sendTurmaCreationToGoogleForms(turmaCode, adminName);
+        }
+
+        // Função para copiar código da turma
+        function copyTurmaCode() {
+            const code = generatedTurmaCode.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                // Feedback visual de cópia bem-sucedida
+                const originalText = copyCodeBtn.textContent;
+                copyCodeBtn.textContent = "Copiado!";
+                copyCodeBtn.style.backgroundColor = "#4CAF50";
+                
+                setTimeout(() => {
+                    copyCodeBtn.textContent = originalText;
+                    copyCodeBtn.style.backgroundColor = "";
+                }, 2000);
+            }).catch(err => {
+                alert("Erro ao copiar código: " + err);
+            });
+        }
+
+        // Função para enviar criação de turma para o Google Forms
+        async function sendTurmaCreationToGoogleForms(turmaCode, adminName) {
+            try {
+                syncStatus.textContent = "Registrando turma...";
+                syncStatus.className = "sync-status sync-pending";
+                syncStatus.style.display = "block";
+                
+                // Preparar os dados para o Forms
+                const formData = new URLSearchParams();
+				formData.append(FORM_FIELDS.Nome, `${adminName}`);
+				formData.append(FORM_FIELDS.Equipe, "Administração");
+                formData.append(FORM_FIELDS.Turma, turmaCode);
+                formData.append(FORM_FIELDS.Pontos, "0");
+				formData.append(FORM_FIELDS.Tipo, "Aplicador");
+                formData.append(FORM_FIELDS.Data, new Date().toLocaleString('pt-BR'));
+                formData.append(FORM_FIELDS.Respostas, "ADMIN");
+                
+                // Enviar para o Google Forms
+                await fetch(GOOGLE_FORMS_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    body: formData
+                });
+                
+                syncStatus.textContent = "Turma registrada!";
+                syncStatus.className = "sync-status sync-success";
+                
+                setTimeout(() => {
+                    syncStatus.style.display = "none";
+                }, 3000);
+                
+            } catch (error) {
+                console.error("Erro ao registrar turma:", error);
+                syncStatus.textContent = "Erro ao registrar turma";
+                syncStatus.className = "sync-status sync-error";
+                
+                setTimeout(() => {
+                    syncStatus.style.display = "none";
+                }, 5000);
+            }
+        }
+
+        // Função para enviar resultados para o Google Forms
+        function submitResults() {
+            // Mostrar status de sincronização
+            syncStatus.textContent = "Enviando resultados...";
+            syncStatus.className = "sync-status sync-pending";
+            syncStatus.style.display = "block";
+            
+            // Preparar dados para envio
+            const formData = new FormData();
+            formData.append(FORM_FIELDS.Turma, playerTurma);
+            formData.append(FORM_FIELDS.Nome, playerName);
+            formData.append(FORM_FIELDS.Pontos, score.toString());
+            formData.append(FORM_FIELDS.Data, new Date().toLocaleString('pt-BR'));
+            formData.append(FORM_FIELDS.Respostas, JSON.stringify(playerAnswers));
+            formData.append(FORM_FIELDS.Tipo, "Quiz Setembro Amarelo");
+            formData.append(FORM_FIELDS.Equipe, playerTeam);
+            
+            // Enviar dados (usando navegation.sendBeacon para melhor confiabilidade)
+            try {
+                navigator.sendBeacon(GOOGLE_FORMS_URL, formData);
+                
+                // Atualizar status
+                setTimeout(() => {
+                    syncStatus.textContent = "Resultados enviados!";
+                    syncStatus.className = "sync-status sync-success";
+                    
+                    // Ocultar após alguns segundos
+                    setTimeout(() => {
+                        syncStatus.style.display = "none";
+                    }, 3000);
+                }, 1000);
+            } catch (error) {
+                syncStatus.textContent = "Erro ao enviar resultados";
+                syncStatus.className = "sync-status sync-error";
+                
+                console.error("Erro ao enviar resultados:", error);
+            }
+        }
+
+        // Inicializar o jogo quando a página carregar
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
