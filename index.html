@@ -270,28 +270,40 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .ribbon {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 150px;
-            height: 150px;
-            overflow: hidden;
-        }
+		.footer-version {
+			position: fixed;
+			bottom: 10px;
+			left: 0;
+			width: 100%;
+			text-align: center;
+			color: #666;
+			font-size: 0.8rem;
+			padding: 5px;
+			z-index: 99;
+		}
+
+        <!-- .ribbon { -->
+            <!-- position: absolute; -->
+            <!-- top: 0; -->
+            <!-- right: 0; -->
+            <!-- width: 150px; -->
+            <!-- height: 150px; -->
+            <!-- overflow: hidden; -->
+        <!-- } -->
         
-        .ribbon span {
-            position: absolute;
-            top: 30px;
-            right: -40px;
-            transform: rotate(45deg);
-            width: 200px;
-            padding: 10px 0;
-            background: var(--amarelo);
-            color: #333;
-            text-align: center;
-            font-weight: bold;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        }
+        <!-- .ribbon span { -->
+            <!-- position: absolute; -->
+            <!-- top: 30px; -->
+            <!-- right: -40px; -->
+            <!-- transform: rotate(45deg); -->
+            <!-- width: 200px; -->
+            <!-- padding: 10px 0; -->
+            <!-- background: var(--amarelo); -->
+            <!-- color: #333; -->
+            <!-- text-align: center; -->
+            <!-- font-weight: bold; -->
+            <!-- box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); -->
+        <!-- } -->
         
         .emoji {
             font-size: 2.5rem;
@@ -448,7 +460,7 @@
         
         .team-sol {
             background-color: var(--cor-sol);
-            color: white;
+            color: #333;
         }
         
         .team-ouro {
@@ -672,8 +684,9 @@
     <div class="container">
         <div class="sun"></div>
         <div class="flower">🌻</div>
-        <div class="ribbon"><span>💛Setembro Amarelo</span></div>
-        
+        <!-- <div class="ribbon"><span>💛Setembro Amarelo</span></div> -->
+        <div class="footer-version">versão 1.001</div>
+		
         <!-- Botão de acesso administrativo -->
         <button id="admin-btn" class="btn btn-admin">Acesso Admin</button>
         
@@ -959,17 +972,17 @@
         ];
 
         // URL do Google Forms (SUBSTITUA com o URL do seu forms)
-        const GOOGLE_FORMS_URL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfLt5JsSDec8Sj8kHJ_LRRE0dQcEFTGD5jh1HyFXPRe2i54sg/formResponse";
+        const GOOGLE_FORMS_URL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfxKo0va83cYwIN3j6CGfm9t9_N776dFeuTiW-DIfn62fF6Zg/formResponse";
         
         // IDs dos campos do Google Forms (SUBSTITUA com os IDs dos seus campos)
         const FORM_FIELDS = {
-			Nome: "entry.781581738",
-            Equipe: "entry.1642870108",
-			Turma: "entry.1548008957",
-			Pontos: "entry.1290128113",
-            Tipo: "entry.821530720",
-			Data: "entry.1167209243",
-			Respostas: "entry.1405787993"
+			Nome: "entry.361874803",
+            Equipe: "entry.1469285729",
+			Turma: "entry.1922825857",
+			Pontos: "entry.569360990",
+            Tipo: "entry.1072025582",
+			Data: "entry.1374840523",
+			Respostas: "entry.162380072"
         };
 
         // Credenciais de admin
