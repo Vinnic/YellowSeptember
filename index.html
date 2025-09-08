@@ -685,7 +685,7 @@
         <div class="sun"></div>
         <div class="flower">🌻</div>
         <!-- <div class="ribbon"><span>💛Setembro Amarelo</span></div> -->
-        <div class="footer-version">versão 1.001</div>
+        <div class="footer-version">versão 1.003</div>
 		
         <!-- Botão de acesso administrativo -->
         <button id="admin-btn" class="btn btn-admin">Acesso Admin</button>
@@ -730,7 +730,7 @@
             <div class="team-join">
                 <h3>Digite o código da turma</h3>
                 <p>Informe o código fornecido pelo aplicador:</p>
-                <input type="text" id="turma-code-input" class="input-code" placeholder="Ex: XX-1234" autocomplete="off" maxlength="7">
+                <input type="text" id="turma-code-input" class="input-code" placeholder="Insira o código" autocomplete="off" maxlength="7">
                 <button id="join-turma-btn" class="btn btn-join">Entrar na Turma</button>
             </div>
             
@@ -833,9 +833,9 @@
                     </div>
                     
                     <div class="admin-field">
-                        <label for="turma-number">Número (4 dígitos):</label>
+                        <label for="turma-number">Código:</label>
                         <div class="generate-code">
-                            <input type="text" id="turma-number" class="input-code" placeholder="1234" maxlength="4">
+                            <input type="text" id="turma-number" class="input-code" placeholder="código" maxlength="6">
                             <button id="generate-code-btn" class="btn btn-generate">Gerar</button>
                         </div>
                     </div>
@@ -971,6 +971,22 @@
             }
         ];
 
+		<!-- --teste local CAIO -->
+        <!-- // URL do Google Forms (SUBSTITUA com o URL do seu forms) -->
+        <!-- const GOOGLE_FORMS_URL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfLt5JsSDec8Sj8kHJ_LRRE0dQcEFTGD5jh1HyFXPRe2i54sg/formResponse"; -->
+        
+        <!-- // IDs dos campos do Google Forms (SUBSTITUA com os IDs dos seus campos) -->
+        <!-- const FORM_FIELDS = { -->
+			<!-- Nome: "entry.781581738", -->
+            <!-- Equipe: "entry.1642870108", -->
+			<!-- Turma: "entry.1548008957", -->
+			<!-- Pontos: "entry.1290128113", -->
+            <!-- Tipo: "entry.821530720", -->
+			<!-- Data: "entry.1167209243", -->
+			<!-- Respostas: "entry.1405787993" -->
+        <!-- }; -->
+
+		<!-- -- IDs CAROL -->
         // URL do Google Forms (SUBSTITUA com o URL do seu forms)
         const GOOGLE_FORMS_URL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfxKo0va83cYwIN3j6CGfm9t9_N776dFeuTiW-DIfn62fF6Zg/formResponse";
         
@@ -1125,6 +1141,17 @@
             prefixButtons[0].classList.add('selected');
         }
 
+		// Verifica se um número é primo
+		function isPrime(num) {
+			if (num <= 1) return false;
+			if (num % 2 === 0) return num === 2;
+			const sqrt = Math.floor(Math.sqrt(num));
+			for (let i = 3; i <= sqrt; i += 2) {
+				if (num % i === 0) return false;
+			}
+			return true;
+		}
+
         // Função para verificar login admin
         function checkAdminLogin() {
             const username = adminUserInput.value.trim();
@@ -1161,16 +1188,28 @@
         }
 
         // Função para entrar na turma
-        function joinTurma() {
-            const code = turmaCodeInput.value.trim().toUpperCase();
-            
-            if (code.length === 7 && code.includes('-')) {
-                playerTurma = code;
-                showScreen(playerIntroScreen);
-            } else {
-                alert("Por favor, digite um código válido no formato XX-1234");
-            }
-        }
+		function joinTurma() {
+			const code = turmaCodeInput.value.trim().toUpperCase();
+
+			if (code.includes('-')) {
+				const numberPart = code.split('-')[1];
+
+				if (!/^\d{4}$|^\d{6}$/.test(numberPart)) {
+					alert("O número da turma é inválido.");
+					return;
+				}
+
+				if (!isPrime(Number(numberPart))) {
+					alert("Esse número não é válido para turma.");
+					return;
+				}
+
+				playerTurma = code;
+				showScreen(playerIntroScreen);
+			} else {
+				alert("Por favor, digite um código válido no formato XX-1234.");
+			}
+		}
 
         // Função para iniciar o jogo
         function startGame() {
@@ -1310,42 +1349,43 @@
             showScreen(welcomeScreen);
         }
 
-        // Função para gerar código aleatório
-        function generateRandomCode() {
-            const randomNum = Math.floor(1000 + Math.random() * 9000); // Gera número entre 1000 e 9999
-            turmaNumberInput.value = randomNum;
-        }
+		// Gera número aleatório primo de 4 dígitos
+		function generateRandomCode() {
+			let num;
+			do {
+				num = Math.floor(1000 + Math.random() * 9000); // 1000–9999
+			} while (!isPrime(num));
 
-        // Função para criar turma
+			turmaNumberInput.value = num;
+		}
+
 		function createTurma() {
 			const adminName = adminNameInput.value.trim();
 			const turmaNumber = turmaNumberInput.value.trim();
-			
+
 			if (!adminName) {
 				alert('Por favor, digite seu nome.');
 				return;
 			}
-			
+
 			if (!/^\d{4}$/.test(turmaNumber)) {
-				alert('Por favor, digite um número de 4 dígitos para o código.');
+				alert('O número precisa ter 4 dígitos.');
 				return;
 			}
-			
+
+			if (!isPrime(Number(turmaNumber))) {
+				alert('O número precisa ser primo.');
+				return;
+			}
+
 			const turmaCode = `${selectedPrefix}-${turmaNumber}`;
-			
-			// Mostrar código gerado
 			generatedTurmaCode.textContent = turmaCode;
 			turmaResult.style.display = 'flex';
-			
-			// Desabilita o botão "Criar Turma"
 			document.getElementById('create-turma-btn').disabled = true;
-			
-			// Opcional: trocar o texto do botão
 			document.getElementById('create-turma-btn').textContent = 'Turma Criada';
-			
-			// Enviar criação de turma para o Google Forms
 			sendTurmaCreationToGoogleForms(turmaCode, adminName);
 		}
+
 
         // Função para copiar código da turma
         function copyTurmaCode() {
