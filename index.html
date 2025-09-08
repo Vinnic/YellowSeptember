@@ -90,6 +90,8 @@
             margin: 10px;
             transition: all 0.3s ease;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			position: relative;
+			z-index: 5;
         }
         
         .btn:hover {
@@ -272,14 +274,17 @@
         
 		.footer-version {
 			position: fixed;
-			bottom: 10px;
+			bottom: 0;
 			left: 0;
 			width: 100%;
 			text-align: center;
 			color: #666;
 			font-size: 0.8rem;
 			padding: 5px;
-			z-index: 99;
+			z-index: 1000;
+			background-color: white;
+			box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+			border-top: 1px solid #eee;
 		}
 
         <!-- .ribbon { -->
@@ -685,10 +690,9 @@
         <div class="sun"></div>
         <div class="flower">🌻</div>
         <!-- <div class="ribbon"><span>💛Setembro Amarelo</span></div> -->
-        <div class="footer-version">versão 1.003</div>
 		
         <!-- Botão de acesso administrativo -->
-        <button id="admin-btn" class="btn btn-admin">Acesso Admin</button>
+        <button id="admin-btn" class="btn btn-admin">Admin</button>
         
         <!-- Tela de Boas-Vindas -->
         <div id="welcome-screen" class="screen active">
@@ -855,6 +859,7 @@
         <!-- Elemento para status de sincronização -->
         <div id="sync-status" class="sync-status" style="display: none;"></div>
     </div>
+    <div class="footer-version">versão 1.004</div>
 
     <script>
         // Perguntas e respostas (com respostas corretas variadas)
