@@ -163,6 +163,14 @@
             font-size: 0.9rem;
         }
         
+        .btn-unblock {
+            background-color: var(--verde);
+            color: white;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            margin: 5px;
+        }
+        
         .options-container {
             display: flex;
             flex-direction: column;
@@ -248,6 +256,18 @@
             border-left: 5px solid var(--amarelo-escuro);
         }
         
+        .message.error {
+            background-color: #ffebee;
+            border-left: 5px solid var(--vermelho);
+            color: #c62828;
+        }
+        
+        .message.info {
+            background-color: #e3f2fd;
+            border-left: 5px solid var(--azul);
+            color: #1565c0;
+        }
+        
         .score {
             font-size: 1.8rem;
             font-weight: bold;
@@ -287,29 +307,6 @@
 			border-top: 1px solid #eee;
 		}
 
-        <!-- .ribbon { -->
-            <!-- position: absolute; -->
-            <!-- top: 0; -->
-            <!-- right: 0; -->
-            <!-- width: 150px; -->
-            <!-- height: 150px; -->
-            <!-- overflow: hidden; -->
-        <!-- } -->
-        
-        <!-- .ribbon span { -->
-            <!-- position: absolute; -->
-            <!-- top: 30px; -->
-            <!-- right: -40px; -->
-            <!-- transform: rotate(45deg); -->
-            <!-- width: 200px; -->
-            <!-- padding: 10px 0; -->
-            <!-- background: var(--amarelo); -->
-            <!-- color: #333; -->
-            <!-- text-align: center; -->
-            <!-- font-weight: bold; -->
-            <!-- box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); -->
-        <!-- } -->
-        
         .emoji {
             font-size: 2.5rem;
             margin: 15px 0;
@@ -605,6 +602,96 @@
             color: var(--roxo);
         }
         
+        /* Tabela de jogadores bloqueados */
+        .blocked-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .blocked-table th, .blocked-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .blocked-table th {
+            background-color: var(--amarelo);
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .blocked-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .hint-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            background-color: var(--amarelo);
+            color: #333;
+            border-radius: 50%;
+            margin-left: 5px;
+            cursor: help;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .blocked-message {
+            background-color: #ffebee;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border-left: 5px solid var(--vermelho);
+            color: #c62828;
+        }
+        
+        .blocked-message h3 {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+        
+        .blocked-message p {
+            margin-bottom: 15px;
+        }
+        
         /* Responsividade */
         @media (max-width: 768px) {
             .container {
@@ -643,6 +730,14 @@
             
             .team-list {
                 flex-direction: column;
+            }
+            
+            .blocked-table {
+                font-size: 0.8rem;
+            }
+            
+            .blocked-table th, .blocked-table td {
+                padding: 8px 10px;
             }
         }
         
@@ -689,7 +784,6 @@
     <div class="container">
         <div class="sun"></div>
         <div class="flower">🌻</div>
-        <!-- <div class="ribbon"><span>💛Setembro Amarelo</span></div> -->
 		
         <!-- Botão de acesso administrativo -->
         <button id="admin-btn" class="btn btn-admin">Admin</button>
@@ -702,6 +796,19 @@
             <p>Este jogo foi criado para promover um ambiente de trabalho mais saudável, com empatia e colaboração entre equipes.</p>
             
             <button id="play-btn" class="btn btn-start">Jogar Agora</button>
+        </div>
+        
+        <!-- Tela de bloqueio -->
+        <div id="blocked-screen" class="screen">
+            <h1>Quiz Já Realizado</h1>
+            <div class="emoji">🔒</div>
+            
+            <div class="blocked-message">
+                <h3>Você já completou este quiz anteriormente</h3>
+                <p>Caso queira jogar novamente, contate o aplicador.</p>
+            </div>
+            
+            <button id="blocked-home-btn" class="btn">Voltar ao Início</button>
         </div>
         
         <!-- Tela de Login Admin -->
@@ -807,10 +914,6 @@
                 <p>Equipe: <span id="player-team-final"></span></p>
             </div>
             
-            <div style="margin: 20px 0;">
-                <button id="restart-btn" class="btn">Jogar Novamente</button>
-            </div>
-            
             <p class="message">Lembre-se: cuidar da saúde mental é um ato de coragem e todos nós podemos fazer a diferença na vida uns dos outros através da escuta ativa e empatia. 💛</p>
         </div>
         
@@ -839,12 +942,10 @@
                     <div class="admin-field">
                         <label for="turma-number">Código:</label>
                         <div class="generate-code">
-                            <input type="text" id="turma-number" class="input-code" placeholder="código" maxlength="6">
-                            <button id="generate-code-btn" class="btn btn-generate">Gerar</button>
+                            <input type="text" id="turma-number" class="input-code" placeholder="código" maxlength="6" readonly>
+                            <button id="generate-code-btn" class="btn btn-generate">Gerar e Criar Turma</button>
                         </div>
                     </div>
-                    
-                    <button id="create-turma-btn" class="btn">Criar Turma</button>
                 </div>
                 
                 <div id="turma-result" class="turma-code-display" style="display: none;">
@@ -853,13 +954,34 @@
                 </div>
             </div>
             
+            <div class="admin-panel">
+                <h3>Sessões bloqueadas 
+                    <span class="tooltip hint-icon">?
+                        <span class="tooltiptext">Jogadores que já completaram o quiz e estão impedidos de jogar novamente</span>
+                    </span>
+                </h3>
+                
+                <table class="blocked-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="blocked-players-list">
+                        <!-- Lista de jogadores bloqueados será preenchida aqui -->
+                    </tbody>
+                </table>
+            </div>
+            
             <button id="admin-back-btn" class="btn">Voltar ao Início</button>
         </div>
                 
         <!-- Elemento para status de sincronização -->
         <div id="sync-status" class="sync-status" style="display: none;"></div>
     </div>
-    <div class="footer-version">versão 1.004</div>
+    <div class="footer-version">versão 1.007</div>
 
     <script>
         // Perguntas e respostas (com respostas corretas variadas)
@@ -884,7 +1006,7 @@
                     "Depressão tem tratamento"
                 ],
                 correct: 1,
-                curiosity: "A depressão é uma condição médica seria, não uma fraqueza de caráter. Buscar ajuda é sinal de força, não de fraqueza. 🌱"
+                curiosity: "A depressão é uma condição médica seria, não uma fraqueza de caráter. Buscar ajuda é sinal de strength, não de fraqueza. 🌱"
             },
             {
                 question: "No Brasil, os registros se aproximam de quantos casos por ano?",
@@ -953,7 +1075,7 @@
                 curiosity: "Entre jovens de 15 a 29 anos, o suicídio é a terceira causa de morte, um dado alarmante que reforça a importância da prevenção. 🌟"
             },
             {
-                question: "O que fazer se você está preocupado com a saúde mental de um colega?",
+                question: "O que fazer se você está preocupado com a saúde mental de a colega?",
                 options: [
                     "Ignorar para não invadir a privacidade",
                     "Conversar em particular e expressar preocupação",
@@ -961,7 +1083,7 @@
                     "Dar ultimatos para que busque ajuda"
                 ],
                 correct: 1,
-                curiosity: "Abordar o assunto com delicadeza e privacidade pode ser o primeiro passo para que alguém busque ajuda. Às vezes, só precisamos saber que alguém se importa. 💬"
+                curiosity: "Abordar o assunto com delicadeza e privacidade pode é o primeiro passo para que alguém busque ajuda. Às vezes, só precisamos saber que alguém se importa. 💬"
             },
             {
                 question: "Se você percebe que está acumulando estresse no trabalho, a reflexão mais produtiva é:",
@@ -976,8 +1098,7 @@
             }
         ];
 
-		<!-- --teste local CAIO -->
-        <!-- // URL do Google Forms (SUBSTITUA com o URL do seu forms) -->
+		<!-- // URL do Google Forms (SUBSTITUA com o URL do seu forms) -->
         <!-- const GOOGLE_FORMS_URL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfLt5JsSDec8Sj8kHJ_LRRE0dQcEFTGD5jh1HyFXPRe2i54sg/formResponse"; -->
         
         <!-- // IDs dos campos do Google Forms (SUBSTITUA com os IDs dos seus campos) -->
@@ -1005,7 +1126,7 @@
 			Data: "entry.1374840523",
 			Respostas: "entry.162380072"
         };
-
+		
         // Credenciais de admin
         const ADMIN_CREDENTIALS = {
             user: "SABER2025",
@@ -1025,6 +1146,7 @@
 
         // Elementos DOM
         const welcomeScreen = document.getElementById('welcome-screen');
+        const blockedScreen = document.getElementById('blocked-screen');
         const adminLoginScreen = document.getElementById('admin-login-screen');
         const turmaEntryScreen = document.getElementById('turma-entry-screen');
         const playerIntroScreen = document.getElementById('player-intro-screen');
@@ -1034,6 +1156,7 @@
         const adminScreen = document.getElementById('admin-screen');
         
         const playBtn = document.getElementById('play-btn');
+        const blockedHomeBtn = document.getElementById('blocked-home-btn');
         const adminBtn = document.getElementById('admin-btn');
         const adminUserInput = document.getElementById('admin-user');
         const adminPassInput = document.getElementById('admin-pass');
@@ -1063,17 +1186,16 @@
         const playerNameFinal = document.getElementById('player-name-final');
         const playerTeamFinal = document.getElementById('player-team-final');
         const finalScore = document.getElementById('final-score');
-        const restartBtn = document.getElementById('restart-btn');
         
         const adminNameInput = document.getElementById('admin-name');
         const prefixButtons = document.querySelectorAll('.prefix-btn');
         const turmaNumberInput = document.getElementById('turma-number');
         const generateCodeBtn = document.getElementById('generate-code-btn');
-        const createTurmaBtn = document.getElementById('create-turma-btn');
         const turmaResult = document.getElementById('turma-result');
         const generatedTurmaCode = document.getElementById('generated-turma-code');
         const copyCodeBtn = document.getElementById('copy-code-btn');
         const adminBackBtn = document.getElementById('admin-back-btn');
+        const blockedPlayersList = document.getElementById('blocked-players-list');
         
         const syncStatus = document.getElementById('sync-status');
         
@@ -1082,13 +1204,34 @@
 
         // Inicialização
         function init() {
+            // Verificar se o jogador já completou o quiz
+            checkIfPlayerBlocked();
+            
             // Event listeners
-            playBtn.addEventListener('click', () => showScreen(turmaEntryScreen));
+            playBtn.addEventListener('click', () => {
+                if (checkIfPlayerBlocked()) {
+                    showScreen(blockedScreen);
+                    return;
+                }
+                showScreen(turmaEntryScreen);
+            });
+            
+			blockedHomeBtn.addEventListener('click', () => {
+				showScreen(welcomeScreen);
+			});
+            
             adminBtn.addEventListener('click', () => showScreen(adminLoginScreen));
             adminLoginBtn.addEventListener('click', checkAdminLogin);
             backToWelcomeFromLoginBtn.addEventListener('click', () => showScreen(welcomeScreen));
             joinTurmaBtn.addEventListener('click', joinTurma);
-            backToWelcomeBtn.addEventListener('click', () => showScreen(welcomeScreen));
+            
+            backToWelcomeBtn.addEventListener('click', () => {
+                if (checkIfPlayerBlocked()) {
+                    showScreen(blockedScreen);
+                    return;
+                }
+                showScreen(welcomeScreen);
+            });
             
             playerNameInput.addEventListener('input', () => {
                 startQuizBtn.disabled = !playerNameInput.value.trim() || !playerTeam;
@@ -1100,7 +1243,6 @@
             quitBtn.addEventListener('click', endGame);
             
             nextBtn.addEventListener('click', nextQuestion);
-            restartBtn.addEventListener('click', restartGame);
             
             // Event listeners para equipes
             teamItems.forEach(item => {
@@ -1121,8 +1263,7 @@
                 });
             });
             
-            generateCodeBtn.addEventListener('click', generateRandomCode);
-            createTurmaBtn.addEventListener('click', createTurma);
+            generateCodeBtn.addEventListener('click', generateAndCreateTurma);
             copyCodeBtn.addEventListener('click', copyTurmaCode);
             adminBackBtn.addEventListener('click', () => showScreen(welcomeScreen));
             
@@ -1144,6 +1285,23 @@
             
             // Selecionar o primeiro prefixo por padrão
             prefixButtons[0].classList.add('selected');
+            
+            // Carregar jogadores bloqueados se estiver na tela de admin
+            if (adminScreen.classList.contains('active')) {
+                loadBlockedPlayers();
+            }
+        }
+
+        // Verificar se o jogador já completou o quiz
+        function checkIfPlayerBlocked() {
+            const playerData = localStorage.getItem('quizPlayerData');
+            if (playerData) {
+                const data = JSON.parse(playerData);
+                if (data.completed) {
+                    return true;
+                }
+            }
+            return false;
         }
 
 		// Verifica se um número é primo
@@ -1166,31 +1324,32 @@
                 showScreen(adminScreen);
                 adminUserInput.value = "";
                 adminPassInput.value = "";
+                loadBlockedPlayers();
             } else {
                 alert("Usuário ou senha incorretos. Tente novamente.");
             }
         }
 
-        // Função para mostrar uma tela específica
-        function showScreen(screen) {
-            // Esconder todas as telas
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            
-            // Mostrar a tela solicitada
-            screen.classList.add('active');
-            
-            // Ações específicas para cada tela
-            if (screen === playerIntroScreen) {
-                currentTurmaCode.textContent = playerTurma;
-            }
+		// Função para mostrar uma tela específica
+		function showScreen(screen) {
+			// Esconder todas as telas
+			document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 			
-			// Esconder o botão de admin se não estiver na tela inicial
-            if (screen.id !== 'welcome-screen') {
-                adminBtn.classList.add('hidden');
-            } else {
-                adminBtn.classList.remove('hidden');
-            }
-        }
+			// Mostrar a tela solicitada
+			screen.classList.add('active');
+			
+			// Ações específicas para cada tela
+			if (screen === playerIntroScreen) {
+				currentTurmaCode.textContent = playerTurma;
+			}
+			
+			// Controlar visibilidade do botão admin - MOSTRAR APENAS NA TELA INICIAL
+			if (screen.id === 'welcome-screen') {
+				adminBtn.classList.remove('hidden');
+			} else {
+				adminBtn.classList.add('hidden');
+			}
+		}
 
         // Função para entrar na turma
 		function joinTurma() {
@@ -1339,22 +1498,24 @@
             playerTeamFinal.textContent = playerTeam;
             finalScore.textContent = score;
             
+            // Marcar jogador como tendo completado o quiz
+            const playerData = {
+                name: playerName,
+                team: playerTeam,
+                turma: playerTurma,
+                completed: true,
+                completedDate: new Date().toISOString(),
+                score: score
+            };
+            localStorage.setItem('quizPlayerData', JSON.stringify(playerData));
+            
             // Enviar resultados para o Google Forms
             submitResults();
             
             showScreen(resultsScreen);
         }
 
-        // Função para reiniciar o jogo
-        function restartGame() {
-            playerNameInput.value = "";
-            playerTeam = "";
-            teamItems.forEach(t => t.classList.remove('selected'));
-            startQuizBtn.disabled = true;
-            showScreen(welcomeScreen);
-        }
-
-		// Gera número aleatório primo de 4 dígitos
+        // Gera número aleatório primo de 4 dígitos
 		function generateRandomCode() {
 			let num;
 			do {
@@ -1362,35 +1523,26 @@
 			} while (!isPrime(num));
 
 			turmaNumberInput.value = num;
+            return num;
 		}
 
-		function createTurma() {
+		// Gerar e criar turma automaticamente
+		function generateAndCreateTurma() {
 			const adminName = adminNameInput.value.trim();
-			const turmaNumber = turmaNumberInput.value.trim();
-
+			
 			if (!adminName) {
 				alert('Por favor, digite seu nome.');
 				return;
 			}
 
-			if (!/^\d{4}$/.test(turmaNumber)) {
-				alert('O número precisa ter 4 dígitos.');
-				return;
-			}
-
-			if (!isPrime(Number(turmaNumber))) {
-				alert('O número precisa ser primo.');
-				return;
-			}
-
+			const turmaNumber = generateRandomCode();
 			const turmaCode = `${selectedPrefix}-${turmaNumber}`;
 			generatedTurmaCode.textContent = turmaCode;
 			turmaResult.style.display = 'flex';
-			document.getElementById('create-turma-btn').disabled = true;
-			document.getElementById('create-turma-btn').textContent = 'Turma Criada';
+			
+			// Enviar criação da turma para o Google Forms
 			sendTurmaCreationToGoogleForms(turmaCode, adminName);
 		}
-
 
         // Função para copiar código da turma
         function copyTurmaCode() {
@@ -1407,6 +1559,74 @@
                 }, 2000);
             }).catch(err => {
                 alert("Erro ao copiar código: " + err);
+            });
+        }
+
+        // Carregar lista de jogadores bloqueados
+        function loadBlockedPlayers() {
+            blockedPlayersList.innerHTML = '';
+            
+            // Obter todos os itens do localStorage que representam jogadores bloqueados
+            const blockedPlayers = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('quizPlayerData')) {
+                    try {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        if (data.completed) {
+                            blockedPlayers.push({
+                                key: key,
+                                name: data.name,
+                                date: new Date(data.completedDate).toLocaleString('pt-BR'),
+                                team: data.team,
+                                turma: data.turma,
+                                score: data.score
+                            });
+                        }
+                    } catch (e) {
+                        console.error('Erro ao analisar dados do jogador:', e);
+                    }
+                }
+            }
+            
+            if (blockedPlayers.length === 0) {
+                blockedPlayersList.innerHTML = '<tr><td colspan="3" style="text-align: center;">Nenhum jogador bloqueado</td></tr>';
+                return;
+            }
+            
+            // Ordenar por data (mais recente primeiro)
+            blockedPlayers.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Adicionar jogadores à tabela
+            blockedPlayers.forEach(player => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${player.name}</td>
+                    <td>${player.date}</td>
+                    <td>
+                        <button class="btn btn-unblock" data-key="${player.key}">Liberar</button>
+                    </td>
+                `;
+                blockedPlayersList.appendChild(row);
+            });
+            
+            // Adicionar event listeners aos botões de liberar
+            document.querySelectorAll('.btn-unblock').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const playerKey = this.getAttribute('data-key');
+                    if (confirm(`Tem certeza que deseja liberar este jogador para jogar novamente?`)) {
+                        try {
+                            const playerData = JSON.parse(localStorage.getItem(playerKey));
+                            playerData.completed = false;
+                            localStorage.setItem(playerKey, JSON.stringify(playerData));
+                            alert('Jogador liberado com sucesso!');
+                            loadBlockedPlayers();
+                        } catch (e) {
+                            alert('Erro ao liberar jogador.');
+                            console.error('Erro ao liberar jogador:', e);
+                        }
+                    }
+                });
             });
         }
 
